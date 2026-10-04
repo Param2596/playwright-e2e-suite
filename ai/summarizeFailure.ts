@@ -7,6 +7,14 @@ export type FailureSummary = {
 export function summarizeFailure(log : string): FailureSummary{
     const text = log.toLowerCase();
 
+    if (text.includes('expected') && text.includes('received')) {
+  return {
+    cause: 'Assertion mismatch — element was found, value was wrong',
+    nextStep: 'Compare expected vs received in the error; fix the expect or the app data',
+    tags: ['assert'],
+      };
+    }
+
     if(text.includes('timeout') || text.includes('waiting for ')) {
         return{
           cause: 'Likely timing or locator wait - element not ready in time',
